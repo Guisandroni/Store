@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export const conectDB = async () => {
-
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URL);
-        console.log(`Mongodb Connected: ${conn.connection.host}`)
+        await prisma.$connect();
     } catch (error) {
-        console.log(`Error:${error.message}`);
-
-        process.exit(1)
+        console.log(`Error: ${error.message}`);
+        process.exit(1);
     }
-}
+};
+
+export default prisma;

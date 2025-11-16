@@ -33,13 +33,26 @@ export function ProdutoCard({ produto }) {
   const { deleteProduto, updateProduto } = useProdutoStore();
 
   const handleUpdateProduto = async (pid, updatedProduto) => {
-    try {
-        await updateProduto(pid, updatedProduto);
-        onClose()
-    } catch (error) {
-        console.error("Erro ao atualizar", error)
-    }
+    const { success, message } = await updateProduto(pid, updatedProduto);
     
+    if (!success) {
+      toast({
+        title: "Erro",
+        description: message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Sucesso",
+        description: "Produto atualizado com sucesso",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+      onClose();
+    }
   };
 
   const handleDelete = async (pid) => {
@@ -94,7 +107,7 @@ export function ProdutoCard({ produto }) {
 
           <IconButton
             icon={<DeleteIcon />}
-            onClick={() => handleDelete(produto._id)}
+            onClick={() => handleDelete(produto.id)}
             colorScheme="red"
           />
         </HStack>
@@ -119,15 +132,17 @@ export function ProdutoCard({ produto }) {
               <Input
                 placeholder="Preço"
                 name="price"
+                type="number"
                 value={updatedProduto.price}
                 onChange={(e) =>
-                  setUpdatedProduto({ ...updatedProduto, price: e.target.value })
+                  setUpdatedProduto({ ...updatedProduto, price: parseFloat(e.target.value) || "" })
                 }
               />
               
               <Input
-                placeholder="imagem"
+                placeholder="URL da imagem"
                 name="image"
+                type="url"
                 value={updatedProduto.image}
                 onChange={(e) =>
                   setUpdatedProduto({ ...updatedProduto, image: e.target.value })
@@ -141,7 +156,7 @@ export function ProdutoCard({ produto }) {
             <Button
             colorScheme="blue"
               mr={3}
-              onClick={() => handleUpdateProduto(produto._id, updatedProduto)}
+              onClick={() => handleUpdateProduto(produto.id, updatedProduto)}
             >
               Atualizar
             </Button>

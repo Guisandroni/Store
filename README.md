@@ -110,19 +110,3 @@ market-Itens/
 ├── README.md              # Documentação do projeto
 └── package.json           # Dependências e scripts do projeto
 ```
-
----
-
-## Licença
-
-Este projeto está licenciado sob a **Licença MIT**. Para mais detalhes, consulte o arquivo [LICENSE](LICENSE).
-
----
-
-## Contato
-
-Se você tiver dúvidas, sugestões ou quiser entrar em contato, sinta-se à vontade para me encontrar em:
-
-- **GitHub:** [Guisandroni](https://github.com/Guisandroni)
-- **Email:**  gui.sandroni@gmail.com
-- **LinkedIn:** [Guisandroni](https://www.linkedin.com/in/guisandroni)

@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 2000
 app.use('/api/produtos',produtoRoutes)
 
 
-//Config build production for deploy
 const __dirname = path.resolve();
 
 if(process.env.NODE_ENV==="production"){
@@ -24,9 +23,8 @@ if(process.env.NODE_ENV==="production"){
     })
 }
 
-    //console.log(process.env.MONGO_URL)
+   
 app.listen(PORT,() =>{
     conectDB();
     console.log("Server is running in http://localhost:" + PORT)
 })
-//TPrwawUlDm3XMpBJ npm install mongodb

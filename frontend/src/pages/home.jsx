@@ -41,7 +41,7 @@ export function Home(){
 
             >
                {produtos.map((produto)=>(
-                <ProdutoCard  key={produto._id} produto={produto}/>
+                <ProdutoCard  key={produto.id} produto={produto}/>
                )
             )}
 

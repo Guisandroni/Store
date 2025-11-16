@@ -11,6 +11,11 @@ export const useProdutoStore = create ((set) => ({
             return {success:false, message:'Por favor preencha os campos vazios'}
         }
 
+        const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        if(!urlPattern.test(newProduto.image)){
+            return {success:false, message:'Por favor insira uma URL válida para a imagem'}
+        }
+
         const res = await fetch('/api/produtos',{
             method:"POST",
             headers:{
@@ -35,11 +40,16 @@ export const useProdutoStore = create ((set) => ({
         })
         const data = await rest.json()
         if(!data.success) return {success: false, message: data.message}
-        set (state=> ({produtos: state.produtos.filter(produto => produto._id !==pid)}))
+        set (state=> ({produtos: state.produtos.filter(produto => produto.id !== pid)}))
         return {success: true, message: data.message}
     },
 
     updateProduto: async (pid, updatedProduto) =>{
+        const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+        if(!urlPattern.test(updatedProduto.image)){
+            return {success:false, message:'Por favor insira uma URL válida para a imagem'}
+        }
+
         const rest = await fetch(`/api/produtos/${pid}`,{
             method:'PUT',
             headers:{
@@ -51,7 +61,7 @@ export const useProdutoStore = create ((set) => ({
         const data = await rest.json()
         if(!data.success) return {success:false, message: data.message}
         set ((state)=> ({
-            produtos: state.produtos.map((produto) => (produto._id === pid ? {... produto,... data.data }: produto))
+            produtos: state.produtos.map((produto) => (produto.id === pid ? {... produto,... data.data }: produto))
         }) )
 
         return {success: true, message: data.message}

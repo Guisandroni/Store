@@ -1,6 +1,8 @@
 import { Box, Button, Container, Heading, Input,  useColorModeValue, useToast, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useProdutoStore } from "../../store/produto";
+import { Link } from "react-router-dom";
+import { ArrowBackIcon } from "@chakra-ui/icons";
 
 export function CreatePage() {
   const [newProduto, setNewProduto] = useState({
@@ -41,8 +43,15 @@ export function CreatePage() {
   return (
     <Container maxWidth={"container.sm"}>
       <VStack spacing={8}>
-        <Heading as={"h1"}  size={"2xl"} textAlign={"center"} mt={20} mb={8}>
-          Novo Produto
+        <Heading as={"h1"}  size={"2xl"} textAlign={"center"} mt={20} mb={8} display={"flex"} alignItems={"center"} justifyContent={"center"} gap={2}>
+         <Link to={'/'}> 
+          <Button color="blue.500"> 
+            <ArrowBackIcon fontSize={22} />
+             </Button>
+         </Link>
+         <span>  
+             Novo Produto
+         </span>
         </Heading>
 
         <Box
@@ -68,13 +77,14 @@ export function CreatePage() {
               type="number"
               value={newProduto.price}
               onChange={(e) =>
-                setNewProduto({ ...newProduto, price: e.target.value })
+                setNewProduto({ ...newProduto, price: parseFloat(e.target.value) || "" })
               }
             />
 
             <Input
-              placeholder="Image"
+              placeholder="URL da Imagem"
               name="image"
+              type="url"
               value={newProduto.image}
               onChange={(e) =>
                 setNewProduto({ ...newProduto, image: e.target.value })

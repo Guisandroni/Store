@@ -15,6 +15,10 @@ dist-ssr
 #dotenv
 .env
 
+# SQLite Database
+database.sqlite
+*.sqlite
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,5 +1,6 @@
 
 import {create} from 'zustand'
+import { getApiUrl } from '../src/config/api'
 
 
 export const useProdutoStore = create ((set) => ({
@@ -16,7 +17,7 @@ export const useProdutoStore = create ((set) => ({
             return {success:false, message:'Por favor insira uma URL válida para a imagem'}
         }
 
-        const res = await fetch('/api/produtos',{
+        const res = await fetch(getApiUrl('/api/produtos'),{
             method:"POST",
             headers:{
                 'Content-Type':'application/json'
@@ -29,13 +30,13 @@ export const useProdutoStore = create ((set) => ({
     },
 
     fetchProdutos: async ()=>{
-        const res = await fetch('/api/produtos')
+        const res = await fetch(getApiUrl('/api/produtos'))
         const data = await res.json()
         set({produtos: data.data })
     },
 
     deleteProduto: async (pid) =>{
-        const rest = await fetch(`/api/produtos/${pid}`, {
+        const rest = await fetch(getApiUrl(`/api/produtos/${pid}`), {
             method:'DELETE',
         })
         const data = await rest.json()
@@ -50,7 +51,7 @@ export const useProdutoStore = create ((set) => ({
             return {success:false, message:'Por favor insira uma URL válida para a imagem'}
         }
 
-        const rest = await fetch(`/api/produtos/${pid}`,{
+        const rest = await fetch(getApiUrl(`/api/produtos/${pid}`),{
             method:'PUT',
             headers:{
                 'Content-Type':'application/json'

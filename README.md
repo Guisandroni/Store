@@ -1,112 +1,286 @@
+# 🛒 Store Items - Sistema de Gerenciamento de Produtos
 
-# Sistema de Gerenciamento de Itens
+Sistema full-stack para gerenciamento de produtos com React + Express + Prisma + SQLite.
 
-Este projeto é um sistema completo de gerenciamento de produtos, desenvolvido com **Node.js** e **Express** no backend, e um frontend construído com **React**. Ele oferece uma API RESTful com endpoints para operações CRUD (Create, Read, Update, Delete) de produtos, além de uma interface gráfica para interação com o sistema.
-
----
-# Acesse o link do Deploy
-
-[https://marketitens.onrender.com/](https://marketitens.onrender.com/)
-
-## Índice
-
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Instalação e Execução](#instalação-e-execução)
-- [Endpoints da API](#endpoints-da-api)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
-- [Contato](#contato)
-
----
-## Screenshots
-
-![alt text](doc/home.PNG)
-
-![alt text](doc/get1.PNG)
-![alt text](doc/get2.PNG)
-![alt text](doc/get3.PNG)
-![alt text](doc/post.PNG)
-![alt text](doc/put.PNG)
-![alt text](doc/delet.PNG)
-
-## Tecnologias Utilizadas
+## 🚀 Tecnologias
 
 ### Backend
-- **Node.js**: Ambiente de execução JavaScript.
-- **Express**: Framework para construção da API RESTful.
+- **Node.js** + **Express** - API REST
+- **Prisma ORM** - Gerenciamento de banco de dados
+- **SQLite** - Banco de dados leve e portátil
 
 ### Frontend
-- **Vite**: Ferramenta de build rápida para desenvolvimento moderno.
-- **React**: Biblioteca para construção da interface do usuário.
-- **Zustand**: Gerenciamento de estado global.
-- **Chakra-UI**: Biblioteca de componentes UI para estilização.
+- **React 18** - Interface do usuário
+- **Vite** - Build tool moderna
+- **Chakra UI** - Componentes e estilização
+- **Zustand** - Gerenciamento de estado
+- **React Router** - Navegação
 
-### Banco de Dados
-- **MongoDB**: Banco de dados NoSQL para armazenamento de dados.
+## 📁 Estrutura do Projeto
 
----
+```
+Store-Items/
+├── backend/
+│   ├── config/
+│   │   └── db.js           # Cliente Prisma
+│   ├── controllers/
+│   │   └── produto.controller.js
+│   ├── routes/
+│   │   └── produto.routes.js
+│   └── server.js
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── navbar.jsx
+│   │   │   └── produtoCard.jsx
+│   │   ├── pages/
+│   │   │   ├── home.jsx
+│   │   │   └── CreatePage.jsx
+│   │   ├── config/
+│   │   │   └── api.js      # Configuração de URLs
+│   │   └── App.jsx
+│   ├── store/
+│   │   └── produto.js      # Zustand store
+│   └── vite.config.js      # Proxy de desenvolvimento
+│
+├── prisma/
+│   ├── schema.prisma       # Schema do banco
+│   ├── migrations/         # Histórico de migrações
+│   └── seed.js            # Dados de exemplo
+│
+├── database.sqlite         # Banco de dados
+├── DEPLOY.md              # Guia completo de deploy
+└── package.json
+```
 
-## Instalação e Execução
-
-Siga os passos abaixo para configurar e executar o projeto localmente.
+## 🔧 Instalação
 
 ### 1. Clone o repositório
-
 ```bash
-git clone https://github.com/Guisandroni/market-Itens.git
+git clone https://github.com/seu-usuario/Store-Items.git
+cd Store-Items
 ```
 
-### 2. Navegue até o diretório do projeto
-
+### 2. Instale as dependências
 ```bash
-cd market-Itens
-```
-
-### 3. Instale as dependências do backend e frontend
-
-No diretório raiz do projeto, instale as dependências do backend:
-
-```bash
+# Backend
 npm install
+
+# Frontend
+cd frontend
+npm install
+cd ..
 ```
 
-Em seguida, execute um único comando, irá instalar as dependências do backend e frontend:
-
+### 3. Configure o banco de dados
 ```bash
-npm run start
+# Gerar cliente Prisma
+npx prisma generate
+
+# Executar migrações
+npx prisma migrate dev
+
+# Popular com dados de exemplo (opcional)
+npm run seed
 ```
 
-Caso queira executar a build para deploy
+## 🎮 Como Usar
+
+### Desenvolvimento
+
+**Opção 1: Executar separadamente**
+```bash
+# Terminal 1 - Backend (porta 2000)
+npm run dev
+
+# Terminal 2 - Frontend (porta 5173)
+cd frontend
+npm run dev
+```
+
+**Opção 2: Executar com concurrently (se configurado)**
+```bash
+npm run dev:all
+```
+
+Acesse:
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:2000/api/produtos`
+- Prisma Studio: `npx prisma studio`
+
+### Produção
 
 ```bash
+# Build do frontend
 npm run build
-```
-### 4.  Acesse o servidor
 
-O servidor estará disponível em:  
-[http://localhost:2000](http://localhost:2000)
+# Iniciar servidor
+npm start
+```
+
+## 📡 Como a Comunicação Funciona
+
+### 🏠 Desenvolvimento
+```
+┌─────────────────┐         ┌──────────────────┐
+│   Frontend      │         │     Backend      │
+│  localhost:5173 │ ─────>  │  localhost:2000  │
+│   (Vite Proxy)  │         │   (Express API)  │
+└─────────────────┘         └──────────────────┘
+```
+
+- O **Vite** tem um proxy configurado
+- Requisições para `/api/*` são redirecionadas para `http://localhost:2000`
+- Não há problemas de CORS
+
+### ☁️ Produção (Deploy Separado)
+```
+┌──────────────────┐         ┌───────────────────┐
+│   Frontend       │         │     Backend       │
+│ Vercel/Netlify   │ ─────>  │  Railway/Render   │
+│ (React Build)    │         │  (Express + CORS) │
+└──────────────────┘         └───────────────────┘
+```
+
+- Frontend usa variável `VITE_API_URL`
+- Backend precisa configurar CORS
+- Ver `DEPLOY.md` para detalhes
+
+## 🎯 Funcionalidades
+
+- ✅ **Listar produtos** - Grid responsivo com todos os produtos
+- ✅ **Criar produto** - Formulário com validação
+- ✅ **Editar produto** - Modal de edição inline
+- ✅ **Deletar produto** - Confirmação com toast
+- ✅ **Validação de URL** - Apenas URLs válidas para imagens
+- ✅ **Validação de preço** - Conversão automática para número
+- ✅ **Dark mode** - Interface clara/escura
+- ✅ **Responsivo** - Funciona em mobile, tablet e desktop
+
+## 📡 Endpoints da API
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/api/produtos` | Lista todos os produtos |
+| POST | `/api/produtos` | Cria um novo produto |
+| PUT | `/api/produtos/:id` | Atualiza um produto |
+| DELETE | `/api/produtos/:id` | Deleta um produto |
+
+### Exemplo de Produto
+```json
+{
+  "name": "Notebook Dell",
+  "price": 3499.99,
+  "image": "https://example.com/image.jpg"
+}
+```
+
+## 🗄️ Banco de Dados
+
+### Schema Prisma
+```prisma
+model Produto {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Float
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+
+### Comandos Úteis
+
+```bash
+# Visualizar dados no navegador
+npx prisma studio
+
+# Criar nova migração
+npx prisma migrate dev --name nome_da_migracao
+
+# Resetar banco de dados
+npx prisma migrate reset
+
+# Popular banco com dados de exemplo
+npm run seed
+```
+
+## 🔐 Variáveis de Ambiente
+
+### Backend (`.env`)
+```bash
+PORT=2000
+NODE_ENV=development
+```
+
+### Frontend (`.env.production`)
+```bash
+# Deixe vazio em dev, configure em produção
+VITE_API_URL=https://seu-backend.com
+```
+
+## 🚀 Deploy
+
+Veja o guia completo em **[DEPLOY.md](./DEPLOY.md)** com instruções para:
+- Deploy monolito (Render, Railway)
+- Deploy separado (Vercel + Railway)
+- Configuração de CORS
+- Variáveis de ambiente
+
+## 🛠️ Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+npm run dev              # Inicia o backend em modo watch
+cd frontend && npm run dev  # Inicia o frontend
+
+# Build
+npm run build           # Build completo (backend + frontend)
+
+# Produção
+npm start              # Inicia o servidor em produção
+
+# Banco de Dados
+npm run seed           # Popula o banco com dados de exemplo
+npx prisma studio      # Interface visual do banco
+npx prisma generate    # Gera o cliente Prisma
+npx prisma migrate dev # Cria e aplica migrações
+```
+
+## 📝 Migrações Realizadas
+
+### Histórico de ORMs
+1. **MongoDB + Mongoose** → 2. **SQLite + Sequelize** → 3. **SQLite + Prisma** ✅
+
+### Vantagens do Prisma
+- ✅ Type-safety e auto-complete
+- ✅ Schema declarativo e legível
+- ✅ Migrações automáticas e versionadas
+- ✅ Prisma Studio (interface visual)
+- ✅ Performance otimizada
+- ✅ Suporte multi-database
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
+## 👨‍💻 Autor
+
+Desenvolvido com ❤️ usando as melhores práticas de desenvolvimento full-stack.
 
 ---
-## Estrutura do Projeto
 
-```
-market-Itens/
-├── backend/               # Código do backend (Node.js + Express)
-│   ├── controllers/       # Lógica dos endpoints
-│   ├── routes/            # Definição das rotas
-│   ├── models/            # Modelos de dados (MongoDB)
-│   | 
-│   └── server.js          # Configuração do express e dotenv
-│
-├── frontend/              # Código do frontend (Vite + React)
-│   ├── src/               # Código-fonte do frontend
-│   │   ├── components/    # Componentes React
-│   │   ├── pages/         # Páginas da aplicação
-│   │   ├── store/         # Chamadas à API (Zustand)
-│   │   └── App.jsx        # Componente principal
-│   └── vite.config.js     # Configuração do Vite
-│
-├── README.md              # Documentação do projeto
-└── package.json           # Dependências e scripts do projeto
-```
+**📚 Documentação adicional:**
+- [Guia de Deploy](./DEPLOY.md)
+- [Documentação do Backend](./backend/README.md)
+- [Prisma Docs](https://www.prisma.io/docs)
+- [Vite Docs](https://vitejs.dev)

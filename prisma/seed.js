@@ -5,11 +5,9 @@ const prisma = new PrismaClient();
 async function main() {
     console.log('🌱 Iniciando seed do banco de dados...');
 
-    // Limpar dados existentes (opcional)
     await prisma.produto.deleteMany();
     console.log('🗑️  Dados antigos removidos');
 
-    // Produtos de exemplo
     const produtos = [
         {
             name: 'Notebook Dell Inspiron',
@@ -73,7 +71,6 @@ async function main() {
         }
     ];
 
-    // Criar produtos
     for (const produto of produtos) {
         await prisma.produto.create({
             data: produto

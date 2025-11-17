@@ -11,7 +11,7 @@ export function Home(){
 
     useEffect(()=> {
         fetchProdutos()
-    }), [fetchProdutos]
+    }, [fetchProdutos])
 
 
     return(

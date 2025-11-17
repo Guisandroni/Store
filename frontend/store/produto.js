@@ -30,9 +30,26 @@ export const useProdutoStore = create ((set) => ({
     },
 
     fetchProdutos: async ()=>{
-        const res = await fetch(getApiUrl('/api/produtos'))
-        const data = await res.json()
-        set({produtos: data.data })
+        try {
+            const url = getApiUrl('/api/produtos');
+        
+            const res = await fetch(url);
+            
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            
+            const data = await res.json();
+            
+            if (data.success && data.data) {
+                set({produtos: data.data });
+            } else {
+                set({produtos: []});
+            }
+        } catch (error) {
+            console.error('❌ Erro ao buscar produtos:', error);
+            return {success: false, message: 'Erro ao buscar produtos'};
+        }
     },
 
     deleteProduto: async (pid) =>{

@@ -9,6 +9,7 @@
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
+    "test:db": "node scripts/test-connection.js",
     "start": "node backend/server.js",
     "seed": "node prisma/seed.js"
   },
@@ -23,6 +24,7 @@
   "dependencies": {
     "@emotion/styled": "^11.14.0",
     "@prisma/client": "^5.22.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "framer-motion": "^12.0.6",

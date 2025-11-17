@@ -5,7 +5,6 @@ export const getProdutos = async (req, res) => {
         const produtos = await prisma.produto.findMany();
         res.status(200).json({ success: true, data: produtos });
     } catch (error) {
-        console.log("Erro ao procurar por produtos:", error.message);
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
@@ -32,7 +31,6 @@ export const postProdutos = async (req, res) => {
         });
         res.status(201).json({ success: true, data: novoProduto });
     } catch (error) {
-        console.error("Erro ao criar um produto:", error.message);
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
@@ -63,7 +61,6 @@ export const putProdutos = async (req, res) => {
     const { id } = req.params;
     const produto = req.body;
 
-    // Validação de URL
     const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
     if (!urlPattern.test(produto.image)) {
         return res.status(400).json({ success: false, message: "Por favor insira uma URL válida para a imagem" });

@@ -13,7 +13,6 @@ router.get('/', getProdutos) //listar
 router.post('/', postProdutos) //criar
 
 
-
 router.delete('/:id', deleteProdutos) //deletar
 
 

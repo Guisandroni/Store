@@ -2,10 +2,17 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import path from 'path'
+import cors from 'cors'
 import { conectDB } from './config/db.js'
 import produtoRoutes from './routes/produto.routes.js'
 
 const  app = express()
+
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:5174',
+    credentials: true
+}))
+
 app.use(express.json())
 dotenv.config()
 
@@ -23,7 +30,7 @@ if(process.env.NODE_ENV==="production"){
     })
 }
 
-   
+
 app.listen(PORT,() =>{
     conectDB();
     console.log("Server is running in http://localhost:" + PORT)
